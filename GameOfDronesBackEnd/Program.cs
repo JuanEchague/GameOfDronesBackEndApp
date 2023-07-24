@@ -1,13 +1,31 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using GameOfDronesBackEnd.Data;
 using GameOfDronesBackEnd.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 // Configurar cadena de conexión a la base de datos
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<GameOfDronesContext>(options =>
     options.UseSqlServer(connectionString));
+
+
+//CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowSpecificOrigins,
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:4200")
+            .AllowAnyOrigin()
+            .AllowAnyMethod();
+        });
+
+});
 
 
 // Add services to the container.
@@ -18,7 +36,19 @@ builder.Services.AddScoped<PlayerRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Agregar el contexto de la base de datos como un servicio
+builder.Services.AddDbContext<GameOfDronesContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 var app = builder.Build();
+
+// Migrar la base de datos en el método Main
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<GameOfDronesContext>();
+    dbContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
