@@ -19,17 +19,17 @@ namespace GameOfDronesBackEnd.Controllers
 
         // Acción de lectura para mostrar todos los jugadores
         [HttpGet]
-        public IActionResult GetPlayers()
+        public IActionResult GetPlayer()
         {
-            List<Player> players = _context.Players.ToList();
-            return Ok(players);
+            List<Player> player = _context.Player.ToList();
+            return Ok(player);
         }
 
         // Acción de lectura para mostrar los detalles de un jugador específico
         [HttpGet("{id}")]
         public IActionResult GetPlayer(int id)
         {
-            Player player = _context.Players.Find(id);
+            Player player = _context.Player.Find(id);
             if (player == null)
             {
                 return NotFound();
@@ -39,11 +39,11 @@ namespace GameOfDronesBackEnd.Controllers
 
         // Acción de escritura para crear un nuevo jugador
         [HttpPost]
-        public IActionResult CreatePlayer(Player player)
+        public IActionResult CreatePlayer([FromBody] Player player)
         {
             if (ModelState.IsValid)
             {
-                _context.Players.Add(player);
+                _context.Player.Add(player);
                 _context.SaveChanges();
                 return CreatedAtAction(nameof(GetPlayer), new { id = player.Id }, player);
             }
@@ -54,7 +54,7 @@ namespace GameOfDronesBackEnd.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdatePlayer(int id, Player updatedPlayer)
         {
-            Player player = _context.Players.Find(id);
+            Player player = _context.Player.Find(id);
             if (player == null)
             {
                 return NotFound();
@@ -74,12 +74,12 @@ namespace GameOfDronesBackEnd.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeletePlayer(int id)
         {
-            Player player = _context.Players.Find(id);
+            Player player = _context.Player.Find(id);
             if (player == null)
             {
                 return NotFound();
             }
-            _context.Players.Remove(player);
+            _context.Player.Remove(player);
             _context.SaveChanges();
             return NoContent();
         }

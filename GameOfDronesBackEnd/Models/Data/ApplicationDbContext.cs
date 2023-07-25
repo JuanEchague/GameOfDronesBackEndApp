@@ -9,7 +9,7 @@ namespace GameOfDronesBackEnd.Models.Data
         {
         }
 
-        public DbSet<Player> Players { get; set; }
+        public DbSet<Player> Player { get; set; }
 
         // Aquí puedes agregar más DbSet para otras entidades si es necesario
 

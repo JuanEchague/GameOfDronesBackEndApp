@@ -9,6 +9,6 @@ namespace GameOfDronesBackEnd.Data
         {
         }
 
-        public DbSet<Player> Players { get; set; }
+        public DbSet<Player> Player { get; set; }
     }
 }

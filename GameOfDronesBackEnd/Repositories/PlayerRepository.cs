@@ -16,17 +16,17 @@ namespace GameOfDronesBackEnd.Repositories
 
         public List<Player> GetAllPlayers()
         {
-            return _context.Players.ToList();
+            return _context.Player.ToList();
         }
 
         public Player GetPlayerById(int id)
         {
-            return _context.Players.FirstOrDefault(p => p.Id == id);
+            return _context.Player.FirstOrDefault(p => p.Id == id);
         }
 
         public void AddPlayer(Player player)
         {
-            _context.Players.Add(player);
+            _context.Player.Add(player);
             _context.SaveChanges();
         }
 

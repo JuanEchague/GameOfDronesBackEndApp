@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameOfDronesBackEnd.Models
 {
+    [Table("Player")]
     public class Player
     {
        
@@ -14,14 +16,9 @@ namespace GameOfDronesBackEnd.Models
         public Move Move { get; set; }
 
 
-                        ///constructores///
-        public Player(int id, string name, Move move)
-        {
-            Id = id;
-            Name = name;
-            Move = move;
-        }
-        public Player() : this(0, string.Empty, Move.None)
+        ///constructores///
+
+        public Player()
         {
         }
     }
