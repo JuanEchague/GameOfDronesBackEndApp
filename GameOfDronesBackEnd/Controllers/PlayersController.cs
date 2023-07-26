@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 using GameOfDronesBackEnd.Data;
 using GameOfDronesBackEnd.Models;
 
@@ -17,7 +15,7 @@ namespace GameOfDronesBackEnd.Controllers
             _context = context;
         }
 
-        // Acción de lectura para mostrar todos los jugadores
+        // Mostrar todos los jugadores
         [HttpGet]
         public IActionResult GetPlayer()
         {
@@ -25,7 +23,7 @@ namespace GameOfDronesBackEnd.Controllers
             return Ok(player);
         }
 
-        // Acción de lectura para mostrar los detalles de un jugador específico
+        // Mostrar los detalles de un jugador específico
         [HttpGet("{id}")]
         public IActionResult GetPlayer(int id)
         {
@@ -37,7 +35,7 @@ namespace GameOfDronesBackEnd.Controllers
             return Ok(player);
         }
 
-        // Acción de escritura para crear un nuevo jugador
+        // Crear un nuevo jugador
         [HttpPost]
         public IActionResult CreatePlayer([FromBody] Player player)
         {
@@ -50,7 +48,7 @@ namespace GameOfDronesBackEnd.Controllers
             return BadRequest(ModelState);
         }
 
-        // Acción de escritura para actualizar un jugador existente
+        // Actualizar un jugador existente
         [HttpPut("{id}")]
         public IActionResult UpdatePlayer(int id, Player updatedPlayer)
         {
@@ -70,7 +68,7 @@ namespace GameOfDronesBackEnd.Controllers
             return BadRequest(ModelState);
         }
 
-        // Acción de escritura para eliminar un jugador
+        // Eliminar un jugador
         [HttpDelete("{id}")]
         public IActionResult DeletePlayer(int id)
         {

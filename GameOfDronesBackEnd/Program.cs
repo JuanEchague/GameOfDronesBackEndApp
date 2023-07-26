@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using GameOfDronesBackEnd.Data;
 using GameOfDronesBackEnd.Repositories;
 
@@ -36,14 +35,11 @@ builder.Services.AddScoped<PlayerRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Agregar el contexto de la base de datos como un servicio
-builder.Services.AddDbContext<GameOfDronesContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 var app = builder.Build();
 
-// Migrar la base de datos en el método Main
+// Migrar la base de datos 
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<GameOfDronesContext>();
