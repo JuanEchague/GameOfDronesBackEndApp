@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GameOfDronesBackEnd.Data;
 using GameOfDronesBackEnd.Models;
+using GameOfDronesBackEnd.Repositories;
 
 namespace GameOfDronesBackEnd.Controllers
 {
@@ -9,10 +10,11 @@ namespace GameOfDronesBackEnd.Controllers
     public class PlayersController : ControllerBase
     {
         private readonly GameOfDronesContext _context;
-
+        private readonly PlayerRepository _playerRepository;
         public PlayersController(GameOfDronesContext context)
         {
             _context = context;
+            _playerRepository = new PlayerRepository(context);
         }
 
         // Mostrar todos los jugadores
@@ -34,7 +36,20 @@ namespace GameOfDronesBackEnd.Controllers
             }
             return Ok(player);
         }
+        //Buscar jugador por nombre
+        [HttpGet("name/{name}")]
+        public ActionResult<Player> GetPlayerByName(string name)
+        {
+            var player = _playerRepository.GetByName(name);
+            if (player == null)
+            {
+                player = new Player { Name = name, Score = 0 };
+                _playerRepository.Add(player);
+                _playerRepository.SaveChanges();
+            }
 
+            return Ok(player);
+        }
         // Crear un nuevo jugador
         [HttpPost]
         public IActionResult CreatePlayer([FromBody] Player player)
@@ -61,7 +76,7 @@ namespace GameOfDronesBackEnd.Controllers
             if (ModelState.IsValid)
             {
                 player.Name = updatedPlayer.Name;
-                player.Move = updatedPlayer.Move;
+                player.Score = updatedPlayer.Score;
                 _context.SaveChanges();
                 return NoContent();
             }

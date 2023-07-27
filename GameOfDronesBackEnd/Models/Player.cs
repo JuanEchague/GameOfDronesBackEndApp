@@ -14,8 +14,7 @@ namespace GameOfDronesBackEnd.Models
         [Required]
         public string Name { get; set; }
 
-        public Move Move { get; set; }
-
+        public int Score { get; set; }
 
         ///constructores///
 
