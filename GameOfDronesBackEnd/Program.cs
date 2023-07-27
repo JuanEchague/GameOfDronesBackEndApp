@@ -6,9 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-// Configurar cadena de conexión a la base de datos
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+// Configurar cadena de conexión a la base de datos
 builder.Services.AddDbContext<GameOfDronesContext>(options =>
     options.UseSqlServer(connectionString));
 
@@ -47,6 +47,8 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
+app.UseCors(myAllowSpecificOrigins);
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
