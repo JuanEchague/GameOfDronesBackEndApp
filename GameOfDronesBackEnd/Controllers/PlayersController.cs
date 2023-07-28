@@ -2,6 +2,7 @@
 using GameOfDronesBackEnd.Data;
 using GameOfDronesBackEnd.Models;
 using GameOfDronesBackEnd.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameOfDronesBackEnd.Controllers
 {
@@ -94,6 +95,42 @@ namespace GameOfDronesBackEnd.Controllers
             }
             _context.Player.Remove(player);
             _context.SaveChanges();
+            return NoContent();
+        }
+        //Guardar puntuacion
+        private bool PlayerExists(int id)
+        {
+            return _context.Player.Any(e => e.Id == id);
+        }
+
+        [HttpPut("UpdateScore/{id}")]
+        public async Task<IActionResult> UpdateScore(int id)
+        {
+            var player = await _context.Player.FindAsync(id);
+            if (player == null)
+            {
+                return NotFound();
+            }
+
+            // Incrementar el puntaje del jugador
+            player.Score++;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PlayerExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
             return NoContent();
         }
     }
