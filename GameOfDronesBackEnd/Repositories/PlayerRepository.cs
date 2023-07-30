@@ -16,6 +16,10 @@ namespace GameOfDronesBackEnd.Repositories
         {
             return _context.Player.FirstOrDefault(p => p.Name == name);
         }
+        public bool PlayerExists(int id)
+        {
+            return _context.Player.Any(e => e.Id == id);
+        }
 
         public void Add(Player player)
         {

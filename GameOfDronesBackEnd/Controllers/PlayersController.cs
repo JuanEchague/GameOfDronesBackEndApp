@@ -18,15 +18,15 @@ namespace GameOfDronesBackEnd.Controllers
             _playerRepository = new PlayerRepository(context);
         }
 
-        // Mostrar todos los jugadores
+        // Get all Players
         [HttpGet]
-        public IActionResult GetPlayer()
+        public IActionResult GetPlayers()
         {
             List<Player> player = _context.Player.ToList();
             return Ok(player);
         }
 
-        // Mostrar los detalles de un jugador específico
+        // Get player by Id
         [HttpGet("{id}")]
         public IActionResult GetPlayer(int id)
         {
@@ -37,7 +37,7 @@ namespace GameOfDronesBackEnd.Controllers
             }
             return Ok(player);
         }
-        //Buscar jugador por nombre
+        //Get player by name
         [HttpGet("name/{name}")]
         public ActionResult<Player> GetPlayerByName(string name)
         {
@@ -51,7 +51,7 @@ namespace GameOfDronesBackEnd.Controllers
 
             return Ok(player);
         }
-        // Crear un nuevo jugador
+        // Create player
         [HttpPost]
         public IActionResult CreatePlayer([FromBody] Player player)
         {
@@ -64,9 +64,9 @@ namespace GameOfDronesBackEnd.Controllers
             return BadRequest(ModelState);
         }
 
-        // Actualizar un jugador existente
-        [HttpPut("{id}")]
-        public IActionResult UpdatePlayer(int id, Player updatedPlayer)
+        // Reset score by id
+        [HttpPut("{id}/reset")]
+        public IActionResult ResetPlayerScore(int id)
         {
             Player player = _context.Player.Find(id);
             if (player == null)
@@ -74,14 +74,10 @@ namespace GameOfDronesBackEnd.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                player.Name = updatedPlayer.Name;
-                player.Score = updatedPlayer.Score;
-                _context.SaveChanges();
-                return NoContent();
-            }
-            return BadRequest(ModelState);
+            player.Score = 0; // Establecer el puntaje del jugador a 0
+            _context.SaveChanges();
+
+            return NoContent();
         }
 
         // Eliminar un jugador
@@ -98,11 +94,6 @@ namespace GameOfDronesBackEnd.Controllers
             return NoContent();
         }
         //Guardar puntuacion
-        private bool PlayerExists(int id)
-        {
-            return _context.Player.Any(e => e.Id == id);
-        }
-
         [HttpPut("UpdateScore/{id}")]
         public async Task<IActionResult> UpdateScore(int id)
         {
@@ -121,7 +112,7 @@ namespace GameOfDronesBackEnd.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PlayerExists(id))
+                if (!_playerRepository.PlayerExists(id))
                 {
                     return NotFound();
                 }
