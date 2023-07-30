@@ -29,7 +29,7 @@ namespace GameOfDronesBackEnd.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Move")
+                    b.Property<int>("Score")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
